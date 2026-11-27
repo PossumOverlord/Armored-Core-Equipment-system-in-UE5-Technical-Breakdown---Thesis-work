@@ -205,3 +205,30 @@ section h2 {
     border-bottom: 1px solid var(--border);
     margin-bottom: 25px;
 }
+
+
+/* Result video */
+.result-video {
+    margin: 32px 0;
+}
+
+.result-video video {
+    display: block;
+    width: 100%;
+    max-height: min(72vh, 720px);
+    object-fit: contain;
+    background: #08080b;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+}
+
+figure {
+    margin: 32px 0;
+}
+
+figcaption {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.5;
+}

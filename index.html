@@ -10,7 +10,7 @@
 <header>
     <p class="eyebrow">THESIS REPORT · TEOMAN BAYINDIR</p>
     <h1>Equipment System in the Vein of Armored Core VI: Fires of Rubicon</h1>
-    <p class="subtitle">A breakdown of designing an equipment system in Unreal Engine 5 for Project Spellrush</p>
+    <p class="subtitle">A breakdown of designing an equipment system in Unreal Engine 5 for Hexmachia</p>
 </header>
 <nav>
     <a href="#introduction">1. Introduction</a>
@@ -23,12 +23,12 @@
 <main>
 <section id="introduction">
     <h2>01 — Introduction</h2>
-    <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game [PROJECT SPELLRUSH] and this thesis work will describe how to create an equipment system in the vein of Armored Core VI: Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. Which leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
+    <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game [PROJECT SPELLRUSH] and this thesis work will describe how to create an equipment system in the vein of Armored Core VI: Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. This leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
     <p>[PROJECT SPELLRUSH] combat is (as previously mentioned) inspired by Armored Core VI: Fires of Rubicon’s combat systems, but shifts its focus entirely on 1v1 multiplayer combat. As two witches partake in a rite where only one may survive.</p>
 </section>
 <section id="goal">
     <h2>02 — Goal</h2>
-    <p>My thesis question is: “How do you create an equipment system in Unreal Engine 5, in the vein of Armored Core VI: Fires of Rubicon?” What my work boils down to is how we can go about using UE5’s tool set to design a system that captures the essence of AC6’s equipment system, rather than mimicking it exactly, as AC6’s system is quite expansive and had a lot of content packed into it. Are there systems that can be abstracted? As in, can certain parts of the system be scoped down, but still have similar strengths to the original? Also, how will the system need to change to reflect the needs for this particular game? Additionally, how will developing this as part of a team change how it's developed? [PROJECT SPELLRUSH] is heavily inspired by Armored Core VI in most aspects of its design, but there will be key differences from the original, as the game tries to find its own identity.</p>
+    <p>My thesis question is: “How do you create an equipment system in Unreal Engine 5 in the vein of Armored Core VI: Fires of Rubicon”. What my work boils down to is how we can go about using UE5’s tool set to design a system that captures the essence of AC6’s equipment system, rather than mimicking it exactly, as AC6’s system is quite expansive and had a lot of content packed into it. Are there systems that can be abstracted (as in can certain parts of the system be scoped down, but still have similar strengths to the original)? Also, how will the system need to change to reflect the needs for this particular game? Additionally, how will developing this as part of a team change how it's developed? [PROJECT SPELLRUSH] is heavily inspired by Armored Core VI in most aspects of its design, but there will be key differences from the original, as the game tries to find its own identity.</p>
 </section>
 <section id="research">
     <h2>03 — Areas of Research</h2>
@@ -103,7 +103,7 @@
     <p>The overlay widget wound up being the solution to the problem as it gets around the one-child limit of the button and can overlay as many of its children as possible.</p>
 
     <h3>Equipment Selection UI and Equipment System Design Philosophy</h3>
-    <p>We decide as a team to simplify AC6’s game design for customization, by reducing the type of different things you could equip down to five (down from twelve). This was done not only to minimize the amount of content we would have to produce, but also to put our own spin on the system by introducing the Weight system. As we decided, the Weight system lets you, whenever you choose a spell, also choose that spell’s “weight”. That weight is represented visually on your character corresponding to where it is equipped and grants that spell bonus effects like improved damage or increased projectile amount, but comes with the cost of making your character travel slower. Although this is a departure from how AC6 works, it still maintains the principle of the player’s choices coming with a cost. It is also a way of making it feel as though our limited amount of spells we can create as an indie team feel like there are a lot more of them, as Weight can alter a lot of things.</p>
+    <p>We decided as a team to simplify AC6’s game design for customization, by reducing the type of different things you could equip down to five (down from twelve). This was done not only to minimize the amount of content we would have to produce, but also to put our own spin on the system by introducing the Weight system. As we decided, the Weight system lets you, whenever you choose a spell, also choose that spell’s “weight”. That weight is represented visually on your character corresponding to where it is equipped and grants that spell bonus effects like improved damage or increased projectile amount, but comes with the cost of making your character travel slower. Although this is a departure from how AC6 works, it still maintains the principle of the player’s choices coming with a cost. It is also a way of making it feel as though our limited amount of spells we can create as an indie time feel like there are a lot more of them, as Weight can alter a lot of things.</p>
     <p>In order to store spells that should be in rotation for the player to use, another Data Asset was created. A BPFL could have also achieved this, but in this case an asset that could be assigned as a variable was more convenient, as it would not require hard coding of where to find these spells.</p>
     <figure><img src="images/ac6-page-9-figure-1.png" alt="Used spells and spell rotation data asset settings"><figcaption>Spells in rotation Data Asset settings</figcaption></figure>
     <p>This solution allows us to insert any SpellsInRotation Data Asset in the used spells variable, which then generates clickable buttons for each spell we have decided the player can use. This is very easy for other developers in the project to use, as they can remove or add spells to the data asset without touching anything else.</p>
@@ -114,13 +114,20 @@
 </section>
 <section id="result">
     <h2>05 — The Result</h2>
-    <p>The source report contains this section heading but no accompanying result text.</p>
+    <p>The following recording demonstrates the result of the equipment system developed for Hexmachia.</p>
+    <figure class="result-video">
+        <video controls preload="metadata" playsinline>
+            <source src="media/hexmachia-equipment-result.mp4" type="video/mp4">
+            Your browser does not support HTML video. Please use a modern browser to view this recording.
+        </video>
+        <figcaption>Equipment system — result demonstration</figcaption>
+    </figure>
 </section>
 <section id="reflection">
     <h2>06 — Reflection</h2>
     <p>I am proud of many of the solutions I found while developing this system in a game engine I am not very versed in, but that has led me to realize a few good lessons and help me see how a few things could have been done more effectively. I feel that I could have worked around UE5’s widgets better, and come up with a better solution than cramming all too much functionality into the button base class. It was definitely the fastest solution, and for an 8 week project that matters a lot, but if I were to work on this further I would break the button down into smaller widget blueprint pieces that can find and access each other's code.</p>
     <p>If this project were to be made in a context where I had other areas of the game I worked on, I would like to work more directly on the spells’ effects to refactor the spell creation system into using a more dynamic and inheritance-based actor class, where actor components define what the spell does.</p>
-    <p>This is more of a wish list item, but having a video preview of the spell (like in Armored Core) would clarify what each spell does and would inform the player’s choices.</p>
+    <p>This is more of a wish list item, but having a video preview of the spell (like in Armored Core) would clarify what each spell does and would better inform the player’s choices.</p>
 </section>
 </main>
 <footer><p>YRGO · Game Programmer Course · Project Spellrush</p></footer>
