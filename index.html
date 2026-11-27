@@ -1,1 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <link rel="stylesheet" href="style.css">
+
+    <title>Witches and Waveforms - Thesis Report</title>
+</head>
+
+<body>
+
+    <header>
+        <p class="eyebrow">THESIS REPORT · DANIELLE LARSSON</p>
+        <h1>Witches & Waveforms</h1>
+        <p class="subtitle">
+            Exploring dynamic sounds in a fantasy PvP game
+        </p>
+    </header>
+
+    <nav>
+        <a href="#introduction">1. Introduction</a>
+        <a href="#thesis-question">2. Thesis Question</a>
+        <a href="#research">3. Research</a>
+        <a href="#process">4. Production</a>
+        <a href="#results">5. Results</a>
+        <a href="#conclusion">6. Conclusion</a>
+    </nav>
+
+    <main>
+
+        <section id="introduction">
+            <h2>01 — Introduction</h2>
+
+            <p>For as long as I can remember, I’ve always been interested in music and sounds. As a kid, I taught myself to play the piano (at least somewhat decently), while at the same time discovering the world of video games (a relatively new phenomenon in Sweden at the time) through games like <i>The Legend of Zelda</i>, <i>Super Mario Bros</i>, <i>Metroid</i> and <i>Castlevania</i> (yes, the originals!). With this, I also became fascinated with the often fantastic soundtracks these games were graced with. The fascination was first and foremost about how catchy these tunes were – they had to be, as the software and hardware at the time didn’t allow for massive orchestral scores or multilayered beats or melodies.</p>
+
+            <p>This would of course gradually change, with (at least as far as I’m concerned) milestones such as <i>Super Metroid</i>, with its cavernous and alien setting reflected perfectly in both its soundtrack and its sound effects design; <i>Final Fantasy VII</i>, with its epic battle and boss themes (and emotional nukes such as <i>Aeris’s Theme</i>); and the first <i>Silent Hill</i>, nerve-straining to the max with its industrial horror soundscape mixed with an acoustic and ambient soundtrack that was both mysterious and haunting – something that would of course evolve further in <i>Silent Hill 2</i>. I would say this is the single most important game for me, especially where music and sound design are concerned.</p>
+
+            <p>From this generation of games onward, many games (especially AAA titles) started sounding more like movies, with intricate sound effects and musical scores or songs that would become increasingly dynamic. These would increasingly be implemented in ways that responded to player actions and the state of the game, going beyond “trigger this sound when the shotgun is fired”, “play this music track when the level starts” or “make it sound this way if you’re in a large hall”. Adaptive sound and music design and implementation have since culminated in moments of absolute brilliance, such as the combat and environmental effects in the Soulsborne games and their often masterfully evolving boss scores, the Ashtray Maze sequence in <i>Control</i> and, quite frankly, the entire soundscape of <i>Helldivers 2</i> – to name a few.</p>
+
+            <p>These are examples of what has inspired me to dive deeper into the sound and music aspects of game programming, and how – as a musician with an interest in sound effects and an aspiring game developer – I can aim to compose, edit and implement music and sounds from start to finish in a way that contributes as much as possible to both immersion and gameplay functionality!</p>
+
+            <p>The work on this thesis has been part of a group project with the goal of creating a fantasy PvP game demo based on the 1v1 arena gameplay of <i>Armored Core VI: Fires of Rubicon</i> by FromSoftware. The combined effort of our group members aims to put all systems and content in place for a fully functional game and gameplay loop, playable online via Steam. The working title has been Project Spellrush, but this will most likely be subject to change before the thesis presentation and any official release.</p>
+
+            <p>The demo has been made using Epic’s Unreal Engine 5, and its scope consists of one arena set on a lake with ancient stone ruins, four different offensive spells (as in, used for attacking – they’re not particularly controversial!) based on different elements or schools of pagan or occult traditions, and three different weight classes, along with flight, boost, shield and hit point mechanics.</p>
+        </section>
+
+        
+        <section id="thesis-question">
+            <h2>02 — Thesis Question</h2>
+        
+            <p>My thesis question can be summarized as:</p>
+        
+            <p><i>How can dynamic sound effects and music be used to increase combat and gameplay awareness, as well as immersion, in a fantasy 1v1 PvP spell-casting game?</i></p>
+        
+            <p>To flesh this out a bit: how can I design spell sound effects and environmental and ambient audio, compose music, and implement all of this in a way that helps the player understand what's going on in the game? At the same time, how can I make sure that, rather than sacrificing immersion for clarity, the sounds and music work to enhance both? By now, it's evident that this thesis and its work will not only center on in-editor or in-engine programming as such, but on the whole chain, from finding sounds to use to actually hearing them in-game. Choosing to maximize awareness and clarity over immersion, or vice versa, would no doubt be a simpler, more straightforward task. But the true value of sound design and its implementation lies in at least trying to find the best possible balance between the two. And this is the goal of this thesis – to make use of both technical implementations and aesthetic choices to contribute to functionality as well as the overall "game feel".</p>
+        
+            <h3>What is dynamic audio?</h3>
+        
+            <p>Simply put, dynamic audio means that sound isn't static or always the same, either from one moment to the next or every time a sound is played. It includes both <i>random</i> elements, where a single action or event has some inherent variation in how it sounds – such as a gun not sounding exactly the same every time the trigger is pulled – and <i>adaptive</i> elements, where the sound changes dynamically depending on player actions or other things going on in the game – such as a car engine changing its sound as the car goes faster or slower. In this thesis, I have explored ways to work with both of these types.</p>
+        </section>
+
+        <section id="research">
+            <h2>03 — Research</h2>
+        
+            <p>My research has mainly been divided into three different phases, some definitely more time-consuming than others. These are:</p>
+        
+            <ul>
+                <li>Choice of tools for this thesis, apart from Unreal Engine</li>
+                <li>Games and game audio/music for reference and inspiration</li>
+                <li>Technical research on how to process sounds dynamically</li>
+            </ul>
+        
+            <h3>MetaSounds, FMOD or Wwise?</h3>
+        
+            <p>As the project was decided to be made using Unreal Engine, the next step for me was to decide what to use for working with dynamic audio. There are a few relevant choices, each with its own merits. MetaSounds is Unreal Engine's own node-based system for working with sounds dynamically. While it has its benefits, such as the ability to synthesize sounds and being directly integrated with the rest of Unreal, the industry also widely uses audio middleware such as FMOD or Wwise.</p>
+        
+            <p>The middleware functions as a bridge between audio and music production and the game engine, allowing for most (and in some cases even more) of the audio manipulation and processing capabilities one would find in an engine, depending on the engine in question, but often in a more streamlined way. As I was not going to be synthesizing sounds for this project, but working only with WAV files, the choice came down to FMOD or Wwise, two widely used applications in the industry, with FMOD often associated with indie production and Wwise with AAA production.</p>
+        
+            <p>While both are capable of achieving similar end results (with Wwise generally considered the slightly more powerful and versatile option), I decided on FMOD. I had scratched the surface of it in a previous project, and its interface and workflow are closer to those of an audio editor or DAW (Digital Audio Workstation), which is more intuitive to me than Wwise's system, built around logic containers and trees. FMOD is also free up to a certain annual revenue threshold.</p>
+        
+            <h3>Games for reference and inspiration</h3>
+        
+            <p>When looking for games to use as references for this project, I had to keep three things in mind: the setting, the feeling and the functionality. As I had suspected, fantasy games where fast-paced PvP is a main feature, or at least designed to be semi-competitive, are really few and far between (although games like <i>Overwatch</i> feature some spell-casting, most of the combat relies on guns).</p>
+        
+            <p>So I tried to find an inspirational middle ground between the turn-based combat of <i>Baldur's Gate 3</i>, the more fast-paced spell-casting of the <i>Diablo</i> games and titles like <i>Hades</i>, and the environmental audio solutions of <i>Smite 2</i>. I found a video where the developers, Titan Forge, demonstrated their use of audio occlusion to muffle sounds behind obstacles in a very clear way. Although the system was implemented using MetaSounds, it gave me a good reference for our project.</p>
+        
+            <p>And as mentioned above, I of course also looked at and listened to <i>Armored Core VI</i>, which has arguably taken a predominantly functional approach, for better or worse, in that audio directly tied to combat awareness takes precedence over elements such as ambience, many movement sounds and music.</p>
+        
+            <p>As for the music, besides my long-time inspiration from other FromSoftware games, I also found relevant examples of dynamic music in lesser-known but more fast-paced titles such as the fighting game <i>Thems' Fighting Herds</i>, where the music not only changes depending on match intensity, but also changes instruments depending on which character currently has the upper hand. Although the latter would be outside the scope of our project and not very relevant (as it is not character-based), the overall use of different stages such as intro, main loop and outro is a close example of what would fit our gameplay very well.</p>
+        
+            <h3>Technical research</h3>
+        
+            <p>The technical research mostly encompassed documentation, Googling, tutorials and other resources regarding FMOD functionality, Unreal Engine blueprinting and a few other things more directly tied to sound design. This process was more about reading up on what a function, option or node does and then applying it in my work.</p>
+        
+            <p>As this phase involved a lot of learning by doing, I spent time exploring and experimenting with parameters, knobs, curves and values until I achieved the desired results. This process will be explained in more detail in the Knowledge Sharing section, but below is an outline of some very valuable new things I learned.</p>
+        
+            <h4>FMOD</h4>
+        
+            <ul>
+                <li>Using parameter seek speed to gradually change a parameter value for smooth transitions.</li>
+        
+                <li>Using scatterer instruments to randomly spawn sound effects during, for example, a loop, as opposed to multi instruments, which are more suited to playing sounds immediately or at a set point in each loop, with variation through settings such as Async and Offset.</li>
+        
+               <li>Using Async playback and random modulation of the Start Offset for further variation. This allows a sound clip to start playing from a randomly selected point within a set range each time, creating more variation in how the beginning of an event sounds.</li>
+        
+                <li>Expanded use of loop regions. While I had worked with loop regions in FMOD previously, it was only for the purpose of looping an ambient sound effect from beginning to end. In this project, however, I used them together with transition regions, destination markers and quantization for dynamic music (see below).</li>
+        
+                <li>Using transition regions to decide within which boundaries in a song or sound effect a parameter change will actually trigger a transition.</li>
+        
+                <li>Using destination markers to decide where the playhead will jump if a parameter triggers a transition within a transition region.</li>
+        
+                <li>Using quantization. After setting the BPM in FMOD to match the music (or, in other cases, a heartbeat or other rhythmic audio), quantization makes sure the current bar (in musical terms) is finished before transitioning or "jumping" to a different part of the song.</li>
+            </ul>
+        
+            <h4>Unreal Engine</h4>
+        
+            <ul>
+                <li>Using custom events on a frame-independent timer to work with FMOD parameters and functions for line tracing, and using that line tracing in conjunction with FMOD seek speed for smooth audio occlusion (muffling sounds behind objects).</li>
+        
+                <li>Using checks for <i>Is Dedicated Server</i> and <i>Is Locally Controlled</i> to ensure proper usage of FMOD events in an online environment.</li>
+        
+                <li>Working with more FMOD nodes, references and functionality in Blueprints.</li>
+            </ul>
+        
+            <h4>Sound design</h4>
+        
+            <ul>
+                <li>Using different types of attenuation curves (volume drop-off) for different types of sounds. An inverse curve will work for most sounds, but an inverse tapered curve with a drop at the end will work better for "boomy" sounds.</li>
+        
+                <li>Refined use of double transients in explosive sounds. Double transients are short, sharp sounds used at the beginning of a sound effect for the purpose of anticipation and added weight. They basically mean "KA-BOOM" instead of just "BOOM". While this was not a new concept for me as such, I had the opportunity to look at how these can be used more subtly, which is more fitting for spell-launch effects that lack the obvious-sounding trigger mechanisms often found in rifles or shotguns.</li>
+        
+                <li>Using environmental reverb. While I have been working with reverb for individual sound effects and in music (sometimes perhaps a bit too enthusiastically), this was a good opportunity to learn more about reverb in wide-open spaces such as our lake arena.</li>
+        
+                <li>Bonus: I learned the names of some more Celtic instruments, including the bodhrán (a handheld drum which is featured prominently in the gameplay music!).</li>
+            </ul>
+        </section>
+
+        <section id="process">
+            <h2>04 — Production Process and Testing</h2>
+        
+            <p>The process of actually making the things I had in mind was roughly divided into three steps (in terms of work and production flow, not necessarily always chronologically):</p>
+        
+            <ol>
+                <li>Produce the audio assets (sound effects and music).</li>
+                <li>Make events in FMOD using these assets, create and assign the various parameters, randomization, regions, etc.</li>
+                <li>Implement the events in Unreal using Blueprints, and, when necessary, build Blueprints to make the sounds and parameters work as intended.</li>
+            </ol>
+        
+            <h3>Audio Production</h3>
+        
+            <p>I will only touch on this very briefly, as this has more to do with sound design, editing and composition than game programming (although technically speaking, the music is also programmed in a sequencer!). For sound effects, I have used free-to-use (and no-attribution-needed) sound effects from online resources, and then edited, combined and exported these in a uniform WAV format as assets ready for use. The editing phase has mostly consisted of cutting, moving and applying various effects to the waveform. I have mainly been using the audio editor Audacity for this. My aim has been to achieve distinct, easily recognizable sounds for spells, impacts and movement (made to match the visual effects in the game), as well as non-intrusive ambience in the form of wind that increases in intensity with player altitude, along with the eerie sounds of loon birds. The UI button click sounds are very straightforward and functional.</p>
+
+            <img src="images/ShieldShatterAudacity.png" alt="Editing the shield shatter SFX clips">
+            <i>Editing the shield shatter SFX clips</i>
+            <br>
+            
+            <p>As for the gameplay music, it has been composed and mixed in the digital audio workstation Reason. My goal was to create a catchy, kind of epic Celtic-sounding tune that would be easy to associate with both witches dancing and battle, with mainly traditional instruments, a shuffle beat mixed with heavy percussion. The music has a few key parts to it, such as a calmer intro, a main gameplay section and a more intense section intended to play the first time either of the characters' shields is broken, reflecting the increased stakes and intensity of that part of the battle.</p>
+
+            <h4>Gameplay music (full version)</h4>
+            
+            <audio controls preload="metadata">
+                <source src="audio/ArmoredWitchFULL.mp3" type="audio/mpeg">
+                Your browser does not support audio playback.
+            </audio>
+            <br>
+
+            <img src="images/ReasonScreen1.png" alt="Making music can be programming too!">
+            <i>Making music can be programming too!</i>
+            <br>
+            
+            <h3>FMOD Events and Parameters</h3>
+        
+            <p>The work in FMOD is also divided into two main parts: placing and processing the sounds in events (with different effects and manipulation through loops, etc.) and then assigning parameters to be changed in Unreal Engine, thereby allowing for adaptive changes in the audio during gameplay.</p>
+        
+            <h4>The Event Sounds</h4>
+        
+            <p>All combat events contain multiple sound clips, and all events make use of basic randomization, such as a random pitch shift for each individual clip, guaranteeing some basic variety each time the event is triggered. Furthermore, most of them contain multi Instruments, which will play a sound at random (or in a predetermined shuffle order, if one so desires) from a list of sounds.</p>
+        
+            <p>For the blood projectile, I opted to use the scatterer Instrument, so that during the projectile's travel sound loop, wet drop sounds will spawn at a random rate and volume between intervals set beforehand, simulating the sound of blood dripping from the projectile (but the actual sound is that of water, I promise!). Similarly, I used a scatterer Instrument for the Astral Homing Projectile, simulating sparkles (as one imagines stars sound like for some reason) appearing at random while the other "main" sound clips run through their loops.</p>
+        
+            <p>Several longer sound clips, such as the projectiles, use the Async (as in asynchronous playback) option, allowing me to use random modulation of the Start Offset to determine where they start playing (for instance, somewhere between 0 and 20% into the clip), adding even further variation. To guarantee a smooth start and end where needed, I used AHDSR Modulation (Attack, Hold, Decay, Sustain and Release), which, in short, determines how fast the sound should reach a certain volume level and then go back to zero. I used this primarily for events with loops, which by definition don't have a natural start or end in their waveform, so that the sound doesn't just "cut in" and "cut out".</p>
+        
+            <p>All sound clips that are supposed to be played in 3D (so the vast majority) are in mono, for an accurate representation of their position in 3D space and also to avoid phase issues. The Master Track output in FMOD, however, is configured for surround sound, allowing the spatialized audio to be properly output to the game's audio system. Ambient effects, such as the wind, should sound like they are everywhere and not originating from a single point, and are therefore exported and used in stereo as 2D sounds instead.</p>
+        
+            <p>Other output functions I have made use of are Max Instances (how many instances of an event can be played at a time) and Cooldown (how much time has to elapse before the same event is allowed to trigger again). This is to prevent the same event and sound effect from overlapping itself, such as if several spell projectiles were to impact at nearly the same instant (which is at least theoretically possible, since different spell projectile types have different travel speeds and might thus "catch up" with a previously launched projectile of a different type). I also made use of FMOD's Doppler effect for projectiles.</p>
+        
+            <p>Nearly all events make use of the Timeline, allowing for the use of loop regions and the placement of sound clips at different positions in the timeline. It also comes with a Master Track, where the combined output of all the sound clips in the event can be handled together.</p>
+        
+            <p>For the gameplay music event, I have used two loop regions (one for each level of match intensity) that work together with transition regions. This means that if a parameter value (see below) is changed, the current bar will finish playing through quantization and then jump to the designated parameter marker.</p>
+
+            <img src="images/MusicRegions.png" alt="FMOD Event window for the music with regions and markers">
+            <i>FMOD Event window for the music with regions and markers</i>
+            <br><br>
+
+            <img src="images/ShieldShatterFMOD.png" alt="The shield shatter event in FMOD">
+            <i>The shield shatter event in FMOD</i>
+            <br>
+            
+            <h4>The Parameters</h4>
+        
+            <p>I created several parameters for the purpose of changing the sounds playing in an event in an adaptive way.</p>
+        
+            <ul>
+                <li><b>Occlusion</b> (all 3D events): Continuous, with a value between 0 and 1, where 0 represents the sound being out in the open and 1 being completely occluded by an obstacle (which in our game would mean it is behind one of the stone ruins from the player's POV). Used with a low-pass filter that basically decreases the maximum frequency range of the sound as the value increases, resulting in a more muffled sound for an occluded sound source. Makes use of the aforementioned Seek function so that when the value changes, it won't just snap to that amount of low-pass filtering, but instead gradually move towards it.</li>
+        
+                <li><b>Altitude</b> (Wind event): Continuous, with values ranging between 0 and 1. The actual altitude of the character in Unreal Units is then clamped between these values in Unreal Engine and is therefore readily usable regardless of the character's actual maximum altitude in the game. Used with the pitch and volume values of the wind, both of which increase with the parameter value. This makes the wind quieter and softer near the water surface, and louder and higher-pitched as the player rises. This event also uses the Seek function.</li>
+        
+                <li><b>Distance</b> (Astral Homing Projectile event): Continuous, with values between 0 and 1,000 Unreal Units (0–10 meters), used with a tremolo effect added to the projectile's sound in the game when it is closer than 10 meters. This is intended as a fantasy version of the gradually intensifying "homing missile closing in" beeps of modern technology.</li>
+        
+                <li><b>Shield Integrity</b> (Shield Impact event): Continuous, with values between 0 and 100, used with pitch that increases as shield integrity goes down.</li>
+        
+                <li><b>Shield Destroyed</b>: Discrete, with values of 0 or 1, and works as a Boolean, where 1 means that a player's shield has been destroyed. Set to Global, allowing the parameter to be changed (and the music to skip to the Shield Destroyed marker) in any Blueprint.</li>
+        
+                <li><b>Round Finished</b>: Exactly the same setup and functionality as Shield Destroyed, but instead skips to the quite dramatic end-"DUH-DUHN" of the music track when the round/match is over.</li>
+            </ul>
+
+            <img src="images/OcclusionCurves.png" alt="Curves for the lowpass filter and volume used in the occlusion parameter">
+            <i>Curves for the lowpass filter and volume used in the occlusion parameter</i>
+            <br><br>
+            
+            <img src="images/WindAltitude.png" alt="Curves for pitch and volume used in the altitude parameter">
+            <i>Curves for pitch and volume used in the altitude parameter</i>
+            <br>
+            
+            <h3>Unreal Engine</h3>
+        
+            <p>My work in Unreal Engine for this thesis has primarily consisted of first setting up an independent test level for initial FMOD functionality and viability, and later making Blueprints for the adaptive parts of the audio. Below follows a brief description of these and their main purpose and functionality.</p>
+        
+            <ul>
+                <li><b>Altitude and wind:</b> I made a Blueprint that measures the player's Z-distance from the water surface in a Custom Event, and clamps that value between the Altitude parameter's 0 and 1 values before passing it to FMOD.</li>
+        
+                <li><b>Audio Occlusion:</b> I made a Blueprint component for Audio Occlusion, also using a Custom Event with a custom timer/update rate of 0.05 seconds. The initial version used a single line trace between the audio source and the player camera, which, together with the event's Seek function, allowed for a smooth transition from muffled to unmuffled sounds and vice versa. This Blueprint mirrored the built-in Occlusion option of FMOD events in Unreal Engine, and could as such be seen as a waste of time production-wise (but of course not a waste in terms of learning). The problem with this single line trace version is that, even if the transition is smooth, the value always lands on a binary occluded or not occluded. So I decided to expand on the Blueprint by adding four additional line traces, positioned above, below, to the left and to the right of the original central trace, forming a cross-shaped pattern. This expands the possible occlusion levels to five: completely occluded, completely unoccluded and three steps in between. Together with the Seek functionality, this provides seamless partial occlusion (at least to the human ear during gameplay).</li>
+        
+                <li><b>Impact Emitter:</b> In order for impacts to make use of audio occlusion, they can't just be played at the impact location, since there would be nothing telling the sounds to check for occlusion. I therefore made an Actor Blueprint that can hold the Audio Occlusion Blueprint component, intended to spawn when a projectile is destroyed. The Impact Emitter actor will then play the intended impact FMOD event and destroy itself after 5 seconds, giving enough time for any of the impact sounds to finish playing.</li>
+            </ul>
+
+            <h3>Testing</h3>
+            
+            <p>Testing was initially carried out in a custom audio test level I set up with a stationary spell emitter shooting a homing projectile object at the player. This was primarily used as a controlled environment to test the viability of the Astral Projectile tremolo and potential similar effects.</p>
+        
+            <p>Occlusion testing was carried out using an audio testing static actor emitting a reasonably clear but moderately annoying alarm clock sound. The test actor was placed behind a ruin, with each line trace having a visual debug line. This was a very effective way of testing that the Audio Occlusion component did its job correctly.</p>
+
+            <img src="images/LineTraceScreen.png" alt="Testing the AudioOcclusion line traces in UE5">
+            <i>Testing the AudioOcclusion line traces in UE5</i>
+            
+            <p>In-game testing has been carried out as the FMOD events have been implemented in the engine. It was immediately clear that individual spell sound effects matched their visual effects very nicely, and the only adjustments needed to the FMOD events were minor volume changes. The wind ambience worked almost surprisingly well in-game during tests of the player character's altitude, and no adjustments were necessary in FMOD.</p>
+        </section>
+
+        <section id="results">
+            <h2>05 — Results</h2>
+        
+            <p>I believe I have answered the question of my thesis in that I have researched, experimented with, produced and tested ways of using dynamic audio as a means of providing both awareness and immersion. The results add situational awareness through occlusion and changes in ambient sound, while the spell sound effects match their visual counterparts and the setting, yet maintain their own distinct character.</p>
+        
+            <p>I also think I have managed to establish a natural link between, for example, the launch, projectile and impact sound effects, while the launch and impact effects also have enough of their own distinctiveness to make them easily separable to the ear. Overall, the sound effects and music feel like they are part of the same setting, and I think there is good cohesion both between the audio assets themselves and between the audio and the rest of the game.</p>
+        
+            <h4>Audio Samples</h4>
+        
+            <audio controls preload="metadata">
+                <source src="audio/AstralDemo.wav" type="audio/wav">
+                Your browser does not support audio playback.
+            </audio>
+            <br>
+            <audio controls preload="metadata">
+                <source src="audio/BoneDemo.wav" type="audio/wav">
+                Your browser does not support audio playback.
+            </audio>
+            <br>
+            <audio controls preload="metadata">
+                <source src="audio/BloodProjDemo.wav" type="audio/wav">
+                Your browser does not support audio playback.
+            </audio>
+            <br>
+            <audio controls preload="metadata">
+                <source src="audio/ShieldShatterDemo.wav" type="audio/wav">
+                Your browser does not support audio playback.
+            </audio>
+            <br>
+
+        </section>
+        
+        <section id="conclusion">
+            <h2>06 — Reflection and Conclusion</h2>
+        
+            <p>This has been a very valuable experience for me, both from a learning perspective and in realizing the capabilities offered by working with an application like FMOD alongside game engines like UE5. As I mentioned earlier, the interface and workflow of FMOD are very intuitive to me (also compared to working with MetaSounds in a previous project), which has made learning and production easier and faster.</p>
+        
+            <p>As for what I chose to focus on for this thesis beyond the combat SFX, I think that, given the gameplay, setting and level, ambient sounds and occlusion were natural choices. However, I can think of several other ways to work with adaptive audio to create a really luxurious soundscape, had there been more time. I've increasingly realized that there are few limits to the ways in which one can work with randomness and adaptive sounds (then again, some of that might just involve using different effects and filters or adding more parameter curves). And while I've far from exhausted everything that can be done with audio for a game like this, I believe my choices and focus during this project have provided a fairly good stepping stone for future work with dynamic sound and music.</p>
+        
+            <p>Regarding the audio occlusion solution, I admit that most players would probably not notice any difference between the single, binary line trace and the multi-trace version I built, given the fast-paced nature of the game and the amount of other things going on at the same time. I do, however, think it was a good example of a valuable experience and a tool that I can bring to other types of projects where it would have greater relevance, such as a horror game where you need to hide from a ghost and the sound and music change depending on how much you see of it – or how much it sees you – or sneaky stealth games in general. I can also imagine using audio occlusion (with perhaps a wider set of line traces) in more surreal settings where, instead of muffling the sound, it applies completely different effects and does weird things.</p>
+        
+            <p>Working with audio occlusion also made me realize that there might be a discussion to be had about whether the player should hear exactly what the character would hear, or exactly what the camera would hear. I suppose that ultimately depends on the game and its gameplay. For a third-person action game, I felt intuitively that the player's ears should be aligned with their eyes/camera (and my impression is that most third-person games go with this solution). But it's easy to imagine game scenarios (again, in, for example, stealth and horror games) where the player's hearing would be muffled if they were hiding in a locker or a box, and perhaps the sound of their breathing or heartbeat could be exaggerated instead.</p>
+        
+            <p>In conclusion, I think the main takeaway is the realization that much of what I learned through working with this thesis question about awareness and immersion in a fantasy combat game can easily be applied to so many other things!</p>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>YRGO GP25 · 2026</p>
+    </footer>
+
+</body>
+</html>
