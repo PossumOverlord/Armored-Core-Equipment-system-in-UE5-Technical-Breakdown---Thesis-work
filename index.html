@@ -22,112 +22,106 @@
 </nav>
 <main>
 <section id="introduction">
-    <h2>01 — Introduction</h2>
-    <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game [PROJECT SPELLRUSH] and this thesis work will describe how to create an equipment system in the vein of Armored Core VI: Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. This leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
-    <p>[PROJECT SPELLRUSH] combat is (as previously mentioned) inspired by Armored Core VI: Fires of Rubicon’s combat systems, but shifts its focus entirely on 1v1 multiplayer combat. As two witches partake in a rite where only one may survive.</p>
+    <h2>1. Introduction</h2>
+    <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game Hexmachia and this thesis work will describe how to create an equipment system in the vein of Armored Core VI: Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. This leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
+    <p>Hexmachia’s combat is (as previously mentioned) inspired by Armored Core VI: Fires of Rubicon’s combat systems, but shifts its focus entirely on 1v1 multiplayer combat as two witches partake in a rite where only one may survive.</p>
 </section>
 <section id="goal">
-    <h2>02 — Goal</h2>
-    <p>My thesis question is: “How do you create an equipment system in Unreal Engine 5 in the vein of Armored Core VI: Fires of Rubicon”. What my work boils down to is how we can go about using UE5’s tool set to design a system that captures the essence of AC6’s equipment system, rather than mimicking it exactly, as AC6’s system is quite expansive and had a lot of content packed into it. Are there systems that can be abstracted (as in can certain parts of the system be scoped down, but still have similar strengths to the original)? Also, how will the system need to change to reflect the needs for this particular game? Additionally, how will developing this as part of a team change how it's developed? [PROJECT SPELLRUSH] is heavily inspired by Armored Core VI in most aspects of its design, but there will be key differences from the original, as the game tries to find its own identity.</p>
+    <h2>2. Goal</h2>
+    <p>My thesis question is: “How do you create an equipment system in Unreal Engine 5 in the vein of Armored Core VI: Fires of Rubicon”. What my work boils down to is how we can go about using UE5’s tool set to design a system that captures the essence of AC6’s equipment system, rather than mimicking it exactly, as AC6’s system is quite expansive and had a lot of content packed into it. Are there systems that can be abstracted (as in can certain parts of the system be scoped down, but still have similar strengths to the original)? Also, how will the system need to change to reflect the needs for this particular game? Additionally, how will developing this as part of a team change how it's developed?</p>
+    <p>Hexmachia is heavily inspired by Armored Core VI in most aspects of its design, but there will be key differences from the original, as the game tries to find its own identity.</p>
 </section>
 <section id="research">
-    <h2>03 — Areas of Research</h2>
-    <h3>Armored Core VI</h3>
-    <p>How does AC6 encourage the player to express themselves and engage with its various systems? Variance in level structure and what enemies you are facing makes the player</p>
-
+    <h2>3. Areas of Research</h2>
     <h3>How would we store static data?</h3>
     <p>In order to create equippable spells for this game, an approach that would make it so other team members could easily create spells on their own would be required, as is good practice when working with other developers.</p>
     <h4>Blueprint Function Library</h4>
-    <p>A Blueprint Function Library’s most common use case is to create functions accessible on a global scope, helping you avoid placing the same nodes over and over again. Although a BPFL cannot contain any variables accessible on a global scope, its functions can instead output variables hard coded into its functions.</p>
-    <p><strong>Pros</strong></p><ul><li>Easy to reach via blueprint.</li></ul>
-    <p><strong>Cons</strong></p><ul>
-        <li>Very unintuitive to use for non-programmers that are part of the team.</li>
+    <p>A Blueprint Function Library most common use case is to create functions accessible on a global scope, helping you avoid placing the same nodes over and over again. Although a BPFL can not contain any variables accessible on a global scope, its functions can instead output variables hard coded into its functions.</p>
+    <p><strong>Pros:</strong></p><ul><li>Easy to reach via blueprint.</li></ul>
+    <p><strong>Cons:</strong></p><ul>
+        <li>Very unintuitive to use for non programmers that are part of the team.</li>
         <li>Finicky to change, as it's layered under a lot of Unreal’s UI.</li>
         <li>Blueprint function libraries have no inheritance, which demands a lot of hard coding when implementing them and more gruntwork when creating new stored spell information.</li>
     </ul>
     <h4>Data Assets</h4>
-    <p>You can imagine Data Assets as an ordinary UE object with exposed variables. You define what set of variable types the object will contain (in a Primary Data Asset), then are able to create assets where you set the values of said variables. Primary Data Assets can also inherit from other PDAs. If you are familiar with Unity engine’s Scriptable Objects,</p>
-    <p><strong>Pros</strong></p><ul>
+    <p>You can imagine Data Assets as an ordinary UE object with exposed variables: you define what set of variables types the object will contain (in a Primary Data Asset), then are able to create assets where you set the values of said variables. Primary Data Assets can also inherit from other PDAs. If you are familiar with Unity engine’s Scriptable Objects,</p>
+    <p><strong>Pros:</strong></p><ul>
         <li>Can inherit. Cuts down on gruntwork.</li>
         <li>Is an asset. Easy for everyone if they just want to change a number of a spell, or create an entirely new one.</li>
     </ul>
-    <p><strong>Cons</strong></p><ul><li>Requires a reference. Making it not as easy to access as a BPFL. Although this lets you slot in whatever Data Asset one wants, so it is a drawback that comes with many benefits.</li></ul>
-    <p>A common theme when researching things for UE5 will be that their documentation does not help you very much. In this case most of this information is easiest to find through YouTube tutorials and user-made forums.</p>
-
-    <h3>How would we store player-inputted data at runtime?</h3>
+    <p><strong>Cons:</strong></p><ul><li>Requires a reference, which makes it more difficult to access than a BPFL. Although the fact that it is a reference lets you easily switch out one Data Asset for another (easy for others to do), it is an imitation that is necessary in order to make the system more dynamic.</li></ul>
+    <p>A common theme when researching things for UE5 will be that their documentation does not help you very much. In this case most information is easiest to find through Youtube tutorials and user made forums.</p>
+    <h3>How would we store player inputted data at runtime?</h3>
     <p>UE5’s primary way of saving data is through the blueprint class Save Game Object. The Save Game Object is like most other objects, the key difference being that it is saved in memory, and therefore it can store its data between levels and between sessions of playing the game.</p>
-
     <h3>How is game UI created in UE5 and what is best practice?</h3>
     <h4>Widgets</h4>
-    <p>UI is an integral part of the system we intend to recreate, as it is the main way the player interacts with it, we need to delve into what common practices are in UE5. UE5’s widgets are a tool that lets you design a User Interface, by placing individual pieces of UI called “Widgets” in a hierarchy, where they can be parented and childed to one another. There are 40+ widgets to choose from and in order to understand what each individual widget does there are a good amount of tutorials online that explain best practice.</p>
-    <p>What most tutorials showcase is that most UI elements consist of many widgets combined to fulfill one specific use case. A button that has a label on it uses the Button widget (which allows it to be clickable) and the Text widget (which displays text). Some common shortcomings many sources warn you of is that changes to a custom widget’s structure can be troublesome, as a significant amount of widgets can only have one child. This will be showcased later as it was something that came up quite often. Additionally, another pain point of widgets is that when one widget is nested in another user-made widget, it can then only be changed in that user-made widget’s blueprint. Variables of nested widgets are completely inaccessible unless exposed via visual scripting, but this has to be done to every user-made widget, which wastes a lot of time. Unfortunately this is a vital part of how UE5’s widgets work, although it is not a flaw that warrants looking into alternatives as UE5 as is does not have any other ways of creating UI.</p>
+    <p>UI is an integral part of the system we intend to recreate. As it is the main way the player interacts with it, we need to delve into what common practices are in UE5. UE5’s widgets is a tool that lets you design a User Interface, by placing individual pieces of UI called “Widgets” in a hierarchy, where they can be parented and childed to one another. There are 40+ widgets to choose from and in order to understand what each individual widget does there are a good amount of tutorials online that explain best practice.</p>
+    <p>What most tutorials showcase is that most UI elements consist of many widgets combined to fulfill one specific use case, a button that has a label on it, it uses the Button widget (which allows it to be clickable) and the Text widget (which displays text).</p>
+    <p>Some common shortcomings many sources warn you about is that changes to a custom widgets structure can be troublesome as a significant amount of widgets can only have one child. This will be showcased later as it was something that came up quite often. Additionally another pain point of widgets is that when one widget is nested in another user made widget, it can then only be changed in that user-made widgets blueprint. Variables of nested widgets are completely inaccessible, unless exposed via visual scripting, but this has to be done to every user-made widget, which wastes a lot of time, but unfortunately this is a vital part of how UE5’s widgets work. Although this is not a flaw that warrants looking into alternatives as UE5 does not have any other ways of creating UI.</p>
     <h4>Widget Components</h4>
-    <p>Widget Components are an experimental feature in UE5, objects one can latch onto a widget, not as a child, but as extension of the widget’s functionality. Unfortunately there is no easy way to do this via blueprint and the time it would take to create this via a C++ solution would not be in the scope of this project nor save the amount of time it would take to implement.</p>
-
+    <p>Widget Components are an experimental feature in UE5. They are objects one can latch onto a widget, not as a child, but as extension of the widget’s functionality. Unfortunately there is no easy way to do this via blueprinting and the time it would take to create this via a C++ solution would not be in the scope of this project nor save the amount of time it would take to implement.</p>
     <h3>Replaying Armored Core VI: Fires of Rubicon</h3>
-    <p>AC6’s main way of making the equipment system engaging is through every piece of equipment having a wide variety of different strengths and drawbacks. Weapons that are hard hitting will have to sacrifice an attribute like weight and/or rate of fire. Even equipment like what kinds of legs you use matter, as ones providing better defences may come at the cost of slower move speed. Keeping in mind that everything must come at a cost is important when making adjustments to this system.</p>
+    <p>AC6’s main way of making the equipment system engaging is through every piece of equipment having a wide variety of different strengths and drawbacks. Weapons that are hard hitting will have to sacrifice an attribute like weight and or rate of fire. Even equipment, like what kinds of leds you use, matter as ones providing better defence may come at the cost of slower move speed. Keeping in mind that everything must come at a cost is important when making adjustments to this system.</p>
 </section>
 <section id="process">
-    <h2>04 — The Process</h2>
-    <h3>Creation of Data Assets for Spells</h3>
-    <p>First thing to implement were the Data Assets for spells, as to not bottleneck other team members that depend on them.</p>
-    <figure><img src="images/ac6-page-4-figure-1.png" alt="First iteration of spell Data Assets"><figcaption>First interaction of spell Data Assets</figcaption></figure>
-    <p>This first iteration of the DAs were easy for the other team members to use. The inheritance tree all growing from PDA_SpellDefinition intended to make it clear what type of spell one would create. Whilst it did partially achieve this, the team requested that there should be fewer spells that were more generic, as the inheritance of the data assets was a little unintuitive to follow.</p>
+    <h2>4. The Process</h2>
+    <h3>Creation Data Assets For Spells</h3>
+    <p>The first thing to implement were the Data Assets for spells, as to not bottleneck other team members that depend on these.</p>
+    <figure><img src="images/ac6-page-4-figure-1.png" alt="First iteration of spell Data Assets"><figcaption>First iteration of spell Data Assets</figcaption></figure>
+    <p>This first iteration of the DAs were easy for the other team members to use. The inheritance tree all growing from PDA_SpellDefinition intended to make it clear what type of spell one would create. Whilst it did partially achieve this, the team requested that there should be fewer spells and that they were more generic as the inheritance of the data assets was a little unintuitive to follow.</p>
     <figure><img src="images/ac6-page-5-figure-1.png" alt="Second iteration of spell Data Assets"><figcaption>Second iteration of spell Data Assets</figcaption></figure>
-    <p>Simplifying the system down to 3 data assets, two of which inherit from PDA_SpellDefinition, ended up being a lot easier to use for the others. Many of the optional properties of a spell are now turned on by setting a bool to true or changing the value of an enum.</p>
-
-    <h3>Creation of the Game’s Save System</h3>
+    <p>Simplifying the system down to 3 data assets, two of which inherit from PDA_SpellDefinition ended up being a lot easier to use for the others. Many of the optional properties of a spell are now turned on by setting a bool to true or changing the value of an enum.</p>
+    <h3>Creation of the games save system</h3>
     <p>In UE5 saving data is achieved via the “Save Game to Slot” function.</p>
-    <figure><img src="images/ac6-page-5-figure-2.png" alt="Save Game to Slot node in Unreal Engine"><figcaption>Save Game to Slot function</figcaption></figure>
+    <figure><img src="images/ac6-page-5-figure-2.png" alt="Save Game to Slot function"><figcaption>Save Game to Slot function</figcaption></figure>
     <p>In order to avoid keeping track of the string of each piece of stored information, a custom save and load function was required as each class of save game object could store a unique string.</p>
-    <figure><img src="images/ac6-page-6-figure-1.png" alt="Blueprint graph for the custom save function"><figcaption>Custom save function</figcaption></figure>
-    <figure><img src="images/ac6-page-6-figure-2.png" alt="Blueprint graph for the load function"><figcaption>Custom load function</figcaption></figure>
-    <p>The load function is not as easy to understand as the save function, but in short you input the class of the save you wish to reach and it returns its corresponding save object. This was also made intentionally generic enough for other programmers to not just save things related to the equipment systems.</p>
-
+    <figure><img src="images/ac6-page-6-figure-1.png" alt="Custom save function"><figcaption>Custom save function</figcaption></figure>
+    <figure><img src="images/ac6-page-6-figure-2.png" alt="Custom load function"><figcaption>Custom load function</figcaption></figure>
+    <p>The load function is not as easy to understand as the save function, but in short you input the class of the save you wish to reach and it returns its corresponding save object. This was also intentionally made generic enough for other programmers to not just save things related to the equipment systems but also other kinds of data.</p>
     <h3>Creation of UI and its Widgets</h3>
     <h4>Base class for buttons</h4>
-    <figure><img src="images/ac6-page-6-figure-3.png" alt="Base button widget hierarchy"><figcaption>Base button widget hierarchy</figcaption></figure>
-    <p>The base button consists of the button widget and its childed text widget as its essentials. As research had warned, these two widgets are hidden when the base button is placed in another widget blueprint.</p>
-    <figure><img src="images/ac6-page-6-figure-4.png" alt="Nested base button widget hierarchy"><figcaption>Base button nested in another widget blueprint</figcaption></figure>
+    <figure><img src="images/ac6-page-6-figure-3.png" alt="Base class for buttons"><figcaption>Base class for buttons</figcaption></figure>
+    <p>The base button consists of the button widget and its childed text widget as its essentials. As my research had warned me, these two widgets are hidden when the base button is placed in another widget blueprint:</p>
+    <figure><img src="images/ac6-page-6-figure-4.png" alt="Nested base button widget"><figcaption>Base button nested in another widget blueprint</figcaption></figure>
     <p>The process of creating buttons and revisiting them later as new functionality was added shows just how much of a time sink it can be to expose the variables of the base button’s widgets. Here is a quick demonstration:</p>
-    <figure><img src="images/ac6-page-7-figure-1.png" alt="Button appearance and color settings in Unreal Engine"><figcaption>Button appearance and color settings</figcaption></figure>
-    <p>Here we can see the button’s color and opacity variable and it can easily be changed in the base buttons blueprint. But since the base button’s children are hidden when placed inside another blueprint we cannot reach this menu, and cannot change the color of each individual base button. To circumvent this we make a public variable called “color”. Now this color variable is not the same as what we want to reach, but we can set the color we want to reach by code. This sets the color of the button to the same color as the public variable.</p>
-    <p>Another problem with button base class was also found during the process. To demonstrate this, let's say we have created a base class button without text and a child button that inherits from the base class. We then want two more buttons: one without text that calls an event when hovered, another with text that calls an event when hovered. In total we seek to create four different buttons. The inheritance of the first two is simple; the other two would require that they inherit from the other two, then implement the exact same hover functionality twice. This might not sound like a lot, but if every optional functionality must be applied to more than one button, it can quickly add up and become a lot of gruntwork. If one wants to tweak functionality it would have to be manually done to every button where it is implemented. This could have been fixed if one could attach widget components with the desired functionality to the buttons, but Unreal does not support user-made widget components, even though Actor and Scene objects can have custom components.</p>
+    <figure><img src="images/ac6-page-7-figure-1.png" alt="Button appearance and color settings"><figcaption>Button appearance and color settings</figcaption></figure>
+    <p>Here we can see the button’s color and opacity variable and it can easily be changed in the base buttons blueprint. But since the base button’s children are hidden when placed inside another blueprint we can not reach this menu, and we cannot change the color of each individual base button. To circumvent this we make a public variable called “color”. Now this color variable is not the same as what we want to reach but we can set the color we want to reach by code. This sets the color of the button to the same color as the public variable.</p>
+    <p>Another problem with button base class was also found during the process. To demonstrate this, let's say we have created a base class button without text and a child button that inherits from the base class. We then want two more buttons: one without text that calls an event when hovered over, another with text that calls an event when hovered over. In total we seek to create four different buttons. The inheritance of the first two is simple, the other two would require that they inherit from the first two, then implement the exact same hover functionality twice. This might not sound like a lot but if every optional functionality must be applied to more than one button, it can quickly add up and become a lot of gruntwork, if one wants to tweak functionality, it would have to be manually done to every button where it is implemented. This could have been fixed if one could attach widget components with the desired functionality to the buttons, but Unreal does not support user-made widget components (though Actor and Scene objects can have custom components).</p>
     <p>This informed the choice of packing the base button with as much functionality as necessary, its tradeoff being its cluttered variables.</p>
-    <figure><img src="images/ac6-page-8-figure-1.png" alt="Base button variables in Unreal Engine"><figcaption>Base button variables</figcaption></figure>
+    <figure><img src="images/ac6-page-8-figure-1.png" alt="Base button variables"><figcaption>Base button variables</figcaption></figure>
     <p>If a variable is left empty, then the code ignores the variable's corresponding functionality.</p>
-
     <h4>Problems when refactoring widgets</h4>
-    <p>Just as research had warned, widgets are very strict with their structure and this was definitely felt when refactoring. As it took time for someone on the team to produce background images for all the buttons in the game, background image functionality was not supported in buttons yet. When it came to implementing the image it required a restructuring of the base button class, as its button widget could only contain one child. It required a lot of experimentation, as it is not very obvious what widget could solve this issue. The “border” widget that has a background image variable always stretches the image to fit the border’s size, which was undesired.</p>
-    <figure><img src="images/ac6-page-8-figure-2.png" alt="Overlay widget hierarchy inside the base button"><figcaption>Overlay widget used to support multiple children</figcaption></figure>
-    <p>The overlay widget wound up being the solution to the problem as it gets around the one-child limit of the button and can overlay as many of its children as possible.</p>
-
-    <h3>Equipment Selection UI and Equipment System Design Philosophy</h3>
-    <p>We decided as a team to simplify AC6’s game design for customization, by reducing the type of different things you could equip down to five (down from twelve). This was done not only to minimize the amount of content we would have to produce, but also to put our own spin on the system by introducing the Weight system. As we decided, the Weight system lets you, whenever you choose a spell, also choose that spell’s “weight”. That weight is represented visually on your character corresponding to where it is equipped and grants that spell bonus effects like improved damage or increased projectile amount, but comes with the cost of making your character travel slower. Although this is a departure from how AC6 works, it still maintains the principle of the player’s choices coming with a cost. It is also a way of making it feel as though our limited amount of spells we can create as an indie time feel like there are a lot more of them, as Weight can alter a lot of things.</p>
-    <p>In order to store spells that should be in rotation for the player to use, another Data Asset was created. A BPFL could have also achieved this, but in this case an asset that could be assigned as a variable was more convenient, as it would not require hard coding of where to find these spells.</p>
-    <figure><img src="images/ac6-page-9-figure-1.png" alt="Used spells and spell rotation data asset settings"><figcaption>Spells in rotation Data Asset settings</figcaption></figure>
-    <p>This solution allows us to insert any SpellsInRotation Data Asset in the used spells variable, which then generates clickable buttons for each spell we have decided the player can use. This is very easy for other developers in the project to use, as they can remove or add spells to the data asset without touching anything else.</p>
-    <p>As seen here in the SpellClickable button’s variables, we can assign what spell saver for the button to use. The spell saver is a class that inherits from our custom Save Object, and makes saving what the player clicks on much simpler.</p>
+    <p>Just as research had warned, widgets are very strict with their structure and this was definitely felt when refactoring. As production for the button background images in the game was scheduled for later, background image functionality was not supported in buttons yet, and when it came to implementing the image it required restructuring the base button class as its button widget could only contain one child. It also required a lot of experimentation as it is not very obvious what widget could solve this issue as the “border” widget that has a background image variable always stretches the image to fit the border’s size, which was undesired.</p>
+    <figure><img src="images/ac6-page-8-figure-2.png" alt="Overlay widget"><figcaption>Overlay widget</figcaption></figure>
+    <p>The overlay widget ended up being the solution to the problem as it gets around the one child limit of the button and can overlay as many of its children as possible.</p>
+    <h3>Equipment selection UI and Equipment System Design Philosophy</h3>
+    <p>We decided as a team to simplify AC6’s game design for customization, by reducing the type of different things you could equip to five (down from twelve). This was done to not only minimize the amount of content we would have to produce but also to our own spin on the system by introducing the Weight system. As we decided, the Weight system lets you, whenever you choose a spell, also choose that spells “weight”, that weight is represented visually on your character corresponding to where it is equipped and grants that spell bonus effects like improved damage or increased projectile amount, but comes with the cost making your character move slower. Although this is a departure from how AC6 works, it still maintains the principle of the players choices coming with a cost and it's a way of making it feel as though our limited amount of spells we can create as an indie time feel like there are a lot more of them, as Weight can alter a lot of things.</p>
+    <p>In order to store spells that should be in rotation for the player to use, another Data Asset was created. A BPFL could have also achieved this, but in this case an asset that could be assigned as a variable was more convenient as it would not require hard coding of where to find these spells.</p>
+    <figure><img src="images/ac6-page-9-figure-1.png" alt="Spells in rotation Data Asset settings"><figcaption>Spells in rotation Data Asset settings</figcaption></figure>
+    <p>This solution allows us to insert any SpellsInRotation Data Asset in the used spells variable, which then generates clickable buttons for each spell that we have decided the player can use. This is very easy for other developers in the project to use as they can remove or add spells to the data asset without touching anything else.</p>
     <figure><img src="images/ac6-page-10-figure-1.png" alt="SpellClickable button variables"><figcaption>SpellClickable button variables</figcaption></figure>
+    <p>As seen here in the SpellClickable button’s variables, we can assign what spell saver for the button to use. The spell saver is a class that inherits from our custom Save Object, and makes saving what the player clicks on much simpler.</p>
     <p>The BP_SpellSaver class:</p>
-    <figure><img src="images/ac6-page-10-figure-2.png" alt="BP Spell Saver class blueprint"><figcaption>BP_SpellSaver class</figcaption></figure>
+    <figure><img src="images/ac6-page-10-figure-2.png" alt="BP_SpellSaver class"><figcaption>BP_SpellSaver class</figcaption></figure>
 </section>
 <section id="result">
-    <h2>05 — The Result</h2>
+    <h2>5. The Result</h2>
+    <p>The following recording demonstrates the result of the equipment system developed for Hexmachia.</p>
     <figure class="result-video">
-        <video controls preload="metadata" playsinline>
+        <video controls preload="metadata">
             <source src="media/hexmachia-equipment-result.mp4" type="video/mp4">
             Your browser does not support HTML video. Please use a modern browser to view this recording.
         </video>
+        <figcaption>Equipment system — result demonstration</figcaption>
     </figure>
 </section>
 <section id="reflection">
-    <h2>06 — Reflection</h2>
-    <p>I am proud of many of the solutions I found while developing this system in a game engine I am not very versed in, but that has led me to realize a few good lessons and help me see how a few things could have been done more effectively. I feel that I could have worked around UE5’s widgets better, and come up with a better solution than cramming all too much functionality into the button base class. It was definitely the fastest solution, and for an 8 week project that matters a lot, but if I were to work on this further I would break the button down into smaller widget blueprint pieces that can find and access each other's code.</p>
-    <p>If this project were to be made in a context where I had other areas of the game I worked on, I would like to work more directly on the spells’ effects to refactor the spell creation system into using a more dynamic and inheritance-based actor class, where actor components define what the spell does.</p>
+    <h2>6. Reflection</h2>
+    <p>I am proud of many of the solutions I found while developing this system in a game engine I am not very versed in, but that has led me to learn a few good lessons and help me see how a few things could have been done more effectively. I feel that I could have worked around UE5’s widgets better, and come up with a better solution then cramming all too much functionality into the button base class. It was definitely the fastest solution, and for an 8 week project, that matters a lot, but if I were to work on this further, I would break the button down into smaller widget blueprint pieces that can find and access each other's code.</p>
+    <p>If this project were to be made in a context where I had other areas of the game I worked on, I would like to work more directly on the spell effects to refactor the spell creation system into using a more dynamic and inheritance-based actor class, where actor components define what the spell does.</p>
     <p>This is more of a wish list item, but having a video preview of the spell (like in Armored Core) would clarify what each spell does and would better inform the player’s choices.</p>
 </section>
 </main>
-<footer><p>YRGO · Game Programmer Course · Project Spellrush</p></footer>
+<footer>YRGO · Game Programmer Course · Project Spellrush</footer>
 </body>
 </html>
