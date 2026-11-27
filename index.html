@@ -3,293 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="stylesheet" href="style.css">
-
-    <title>Witches and Waveforms - Thesis Report</title>
+    <title>Armored Core VI Equipment System — Thesis Report</title>
 </head>
-
 <body>
+<header>
+    <p class="eyebrow">THESIS REPORT · TEOMAN BAYINDIR</p>
+    <h1>Equipment System in the Vein of Armored Core VI: Fires of Rubicon</h1>
+    <p class="subtitle">A breakdown of designing an equipment system in Unreal Engine 5 for Project Spellrush</p>
+</header>
+<nav>
+    <a href="#introduction">1. Introduction</a>
+    <a href="#goal">2. Goal</a>
+    <a href="#research">3. Areas of Research</a>
+    <a href="#process">4. The Process</a>
+    <a href="#result">5. The Result</a>
+    <a href="#reflection">6. Reflection</a>
+</nav>
+<main>
+<section id="introduction">
+    <h2>01 — Introduction</h2>
+    <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game [PROJECT SPELLRUSH] and this thesis work will describe how to create an equipment system in the vein of Armored Core VI: Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. Which leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
+    <p>[PROJECT SPELLRUSH] combat is (as previously mentioned) inspired by Armored Core VI: Fires of Rubicon’s combat systems, but shifts its focus entirely on 1v1 multiplayer combat. As two witches partake in a rite where only one may survive.</p>
+</section>
+<section id="goal">
+    <h2>02 — Goal</h2>
+    <p>My thesis question is: “How do you create an equipment system in Unreal Engine 5, in the vein of Armored Core VI: Fires of Rubicon?” What my work boils down to is how we can go about using UE5’s tool set to design a system that captures the essence of AC6’s equipment system, rather than mimicking it exactly, as AC6’s system is quite expansive and had a lot of content packed into it. Are there systems that can be abstracted? As in, can certain parts of the system be scoped down, but still have similar strengths to the original? Also, how will the system need to change to reflect the needs for this particular game? Additionally, how will developing this as part of a team change how it's developed? [PROJECT SPELLRUSH] is heavily inspired by Armored Core VI in most aspects of its design, but there will be key differences from the original, as the game tries to find its own identity.</p>
+</section>
+<section id="research">
+    <h2>03 — Areas of Research</h2>
+    <h3>Armored Core VI</h3>
+    <p>How does AC6 encourage the player to express themselves and engage with its various systems? Variance in level structure and what enemies you are facing makes the player</p>
 
-    <header>
-        <p class="eyebrow">THESIS REPORT · TEOMAN BAYINDIR</p>
-        <h1>Armored Core VI Equipment System in UE5 Technical Breakdown</h1>
-        <p class="subtitle">
-            LOREM IPSUM
-        </p>
-    </header>
+    <h3>How would we store static data?</h3>
+    <p>In order to create equippable spells for this game, an approach that would make it so other team members could easily create spells on their own would be required, as is good practice when working with other developers.</p>
+    <h4>Blueprint Function Library</h4>
+    <p>A Blueprint Function Library’s most common use case is to create functions accessible on a global scope, helping you avoid placing the same nodes over and over again. Although a BPFL cannot contain any variables accessible on a global scope, its functions can instead output variables hard coded into its functions.</p>
+    <p><strong>Pros</strong></p><ul><li>Easy to reach via blueprint.</li></ul>
+    <p><strong>Cons</strong></p><ul>
+        <li>Very unintuitive to use for non-programmers that are part of the team.</li>
+        <li>Finicky to change, as it's layered under a lot of Unreal’s UI.</li>
+        <li>Blueprint function libraries have no inheritance, which demands a lot of hard coding when implementing them and more gruntwork when creating new stored spell information.</li>
+    </ul>
+    <h4>Data Assets</h4>
+    <p>You can imagine Data Assets as an ordinary UE object with exposed variables. You define what set of variable types the object will contain (in a Primary Data Asset), then are able to create assets where you set the values of said variables. Primary Data Assets can also inherit from other PDAs. If you are familiar with Unity engine’s Scriptable Objects,</p>
+    <p><strong>Pros</strong></p><ul>
+        <li>Can inherit. Cuts down on gruntwork.</li>
+        <li>Is an asset. Easy for everyone if they just want to change a number of a spell, or create an entirely new one.</li>
+    </ul>
+    <p><strong>Cons</strong></p><ul><li>Requires a reference. Making it not as easy to access as a BPFL. Although this lets you slot in whatever Data Asset one wants, so it is a drawback that comes with many benefits.</li></ul>
+    <p>A common theme when researching things for UE5 will be that their documentation does not help you very much. In this case most of this information is easiest to find through YouTube tutorials and user-made forums.</p>
 
-    <nav>
-        <a href="#introduction">1. Introduction</a>
-        <a href="#thesis-question">2. Goal</a>
-        <a href="#research">3. Areas of Research</a>
-        <a href="#process">4. The Process</a>
-        <a href="#results">5. The Result</a>
-        <a href="#conclusion">6. Reflection</a>
-    </nav>
+    <h3>How would we store player-inputted data at runtime?</h3>
+    <p>UE5’s primary way of saving data is through the blueprint class Save Game Object. The Save Game Object is like most other objects, the key difference being that it is saved in memory, and therefore it can store its data between levels and between sessions of playing the game.</p>
 
-    <main>
+    <h3>How is game UI created in UE5 and what is best practice?</h3>
+    <h4>Widgets</h4>
+    <p>UI is an integral part of the system we intend to recreate, as it is the main way the player interacts with it, we need to delve into what common practices are in UE5. UE5’s widgets are a tool that lets you design a User Interface, by placing individual pieces of UI called “Widgets” in a hierarchy, where they can be parented and childed to one another. There are 40+ widgets to choose from and in order to understand what each individual widget does there are a good amount of tutorials online that explain best practice.</p>
+    <p>What most tutorials showcase is that most UI elements consist of many widgets combined to fulfill one specific use case. A button that has a label on it uses the Button widget (which allows it to be clickable) and the Text widget (which displays text). Some common shortcomings many sources warn you of is that changes to a custom widget’s structure can be troublesome, as a significant amount of widgets can only have one child. This will be showcased later as it was something that came up quite often. Additionally, another pain point of widgets is that when one widget is nested in another user-made widget, it can then only be changed in that user-made widget’s blueprint. Variables of nested widgets are completely inaccessible unless exposed via visual scripting, but this has to be done to every user-made widget, which wastes a lot of time. Unfortunately this is a vital part of how UE5’s widgets work, although it is not a flaw that warrants looking into alternatives as UE5 as is does not have any other ways of creating UI.</p>
+    <h4>Widget Components</h4>
+    <p>Widget Components are an experimental feature in UE5, objects one can latch onto a widget, not as a child, but as extension of the widget’s functionality. Unfortunately there is no easy way to do this via blueprint and the time it would take to create this via a C++ solution would not be in the scope of this project nor save the amount of time it would take to implement.</p>
 
-        <section id="introduction">
-            <h2>01 — Introduction</h2>
-            <p>My name is Teoman Bayindir and this is my thesis work for Yrgo’s game programmer course. This work was done midst the development of the game [PROJECT SPELLRUSH] and this thesis work will describe how to create an equipment system in the vein of Armored Core VI Fires of Rubicon in Unreal Engine 5. AC6’s equipment system lets the player customize parts of their mech. Which leads to players feeling a sense of ownership of their character, expressing the way they want to tackle the game's various challenges, and getting a sense of satisfaction upon beating said challenges with their own brain child. When one faces failure, it encourages having to take a step back and analyze, then strategize about what equipment could be of more use. This is why I deem this system worthy of replicating.</p>
+    <h3>Replaying Armored Core VI: Fires of Rubicon</h3>
+    <p>AC6’s main way of making the equipment system engaging is through every piece of equipment having a wide variety of different strengths and drawbacks. Weapons that are hard hitting will have to sacrifice an attribute like weight and/or rate of fire. Even equipment like what kinds of legs you use matter, as ones providing better defences may come at the cost of slower move speed. Keeping in mind that everything must come at a cost is important when making adjustments to this system.</p>
+</section>
+<section id="process">
+    <h2>04 — The Process</h2>
+    <h3>Creation of Data Assets for Spells</h3>
+    <p>First thing to implement were the Data Assets for spells, as to not bottleneck other team members that depend on them.</p>
+    <figure><img src="images/ac6-page-4-figure-1.png" alt="First iteration of spell Data Assets"><figcaption>First interaction of spell Data Assets</figcaption></figure>
+    <p>This first iteration of the DAs were easy for the other team members to use. The inheritance tree all growing from PDA_SpellDefinition intended to make it clear what type of spell one would create. Whilst it did partially achieve this, the team requested that there should be fewer spells that were more generic, as the inheritance of the data assets was a little unintuitive to follow.</p>
+    <figure><img src="images/ac6-page-5-figure-1.png" alt="Second iteration of spell Data Assets"><figcaption>Second iteration of spell Data Assets</figcaption></figure>
+    <p>Simplifying the system down to 3 data assets, two of which inherit from PDA_SpellDefinition, ended up being a lot easier to use for the others. Many of the optional properties of a spell are now turned on by setting a bool to true or changing the value of an enum.</p>
 
-            <p>[PROJECT SPELLRUSH] combat is (as previously mentioned) inspired by Armored Core VI Fires of Rubicon’s combat systems, but shifts its focus entirely on 1v1 multiplayer combat. As two witches partake in a rite where only one may survive.</p>
-        </section>
+    <h3>Creation of the Game’s Save System</h3>
+    <p>In UE5 saving data is achieved via the “Save Game to Slot” function.</p>
+    <figure><img src="images/ac6-page-5-figure-2.png" alt="Save Game to Slot node in Unreal Engine"><figcaption>Save Game to Slot function</figcaption></figure>
+    <p>In order to avoid keeping track of the string of each piece of stored information, a custom save and load function was required as each class of save game object could store a unique string.</p>
+    <figure><img src="images/ac6-page-6-figure-1.png" alt="Blueprint graph for the custom save function"><figcaption>Custom save function</figcaption></figure>
+    <figure><img src="images/ac6-page-6-figure-2.png" alt="Blueprint graph for the load function"><figcaption>Custom load function</figcaption></figure>
+    <p>The load function is not as easy to understand as the save function, but in short you input the class of the save you wish to reach and it returns its corresponding save object. This was also made intentionally generic enough for other programmers to not just save things related to the equipment systems.</p>
 
-        
-        <section id="thesis-question">
-            <h2>02 — Thesis Question</h2>
-        
-            <p>My thesis question can be summarized as:</p>
-        
-            <p><i>How can dynamic sound effects and music be used to increase combat and gameplay awareness, as well as immersion, in a fantasy 1v1 PvP spell-casting game?</i></p>
-        
-            <p>To flesh this out a bit: how can I design spell sound effects and environmental and ambient audio, compose music, and implement all of this in a way that helps the player understand what's going on in the game? At the same time, how can I make sure that, rather than sacrificing immersion for clarity, the sounds and music work to enhance both? By now, it's evident that this thesis and its work will not only center on in-editor or in-engine programming as such, but on the whole chain, from finding sounds to use to actually hearing them in-game. Choosing to maximize awareness and clarity over immersion, or vice versa, would no doubt be a simpler, more straightforward task. But the true value of sound design and its implementation lies in at least trying to find the best possible balance between the two. And this is the goal of this thesis – to make use of both technical implementations and aesthetic choices to contribute to functionality as well as the overall "game feel".</p>
-        
-            <h3>What is dynamic audio?</h3>
-        
-            <p>Simply put, dynamic audio means that sound isn't static or always the same, either from one moment to the next or every time a sound is played. It includes both <i>random</i> elements, where a single action or event has some inherent variation in how it sounds – such as a gun not sounding exactly the same every time the trigger is pulled – and <i>adaptive</i> elements, where the sound changes dynamically depending on player actions or other things going on in the game – such as a car engine changing its sound as the car goes faster or slower. In this thesis, I have explored ways to work with both of these types.</p>
-        </section>
+    <h3>Creation of UI and its Widgets</h3>
+    <h4>Base class for buttons</h4>
+    <figure><img src="images/ac6-page-6-figure-3.png" alt="Base button widget hierarchy"><figcaption>Base button widget hierarchy</figcaption></figure>
+    <p>The base button consists of the button widget and its childed text widget as its essentials. As research had warned, these two widgets are hidden when the base button is placed in another widget blueprint.</p>
+    <figure><img src="images/ac6-page-6-figure-4.png" alt="Nested base button widget hierarchy"><figcaption>Base button nested in another widget blueprint</figcaption></figure>
+    <p>The process of creating buttons and revisiting them later as new functionality was added shows just how much of a time sink it can be to expose the variables of the base button’s widgets. Here is a quick demonstration:</p>
+    <figure><img src="images/ac6-page-7-figure-1.png" alt="Button appearance and color settings in Unreal Engine"><figcaption>Button appearance and color settings</figcaption></figure>
+    <p>Here we can see the button’s color and opacity variable and it can easily be changed in the base buttons blueprint. But since the base button’s children are hidden when placed inside another blueprint we cannot reach this menu, and cannot change the color of each individual base button. To circumvent this we make a public variable called “color”. Now this color variable is not the same as what we want to reach, but we can set the color we want to reach by code. This sets the color of the button to the same color as the public variable.</p>
+    <p>Another problem with button base class was also found during the process. To demonstrate this, let's say we have created a base class button without text and a child button that inherits from the base class. We then want two more buttons: one without text that calls an event when hovered, another with text that calls an event when hovered. In total we seek to create four different buttons. The inheritance of the first two is simple; the other two would require that they inherit from the other two, then implement the exact same hover functionality twice. This might not sound like a lot, but if every optional functionality must be applied to more than one button, it can quickly add up and become a lot of gruntwork. If one wants to tweak functionality it would have to be manually done to every button where it is implemented. This could have been fixed if one could attach widget components with the desired functionality to the buttons, but Unreal does not support user-made widget components, even though Actor and Scene objects can have custom components.</p>
+    <p>This informed the choice of packing the base button with as much functionality as necessary, its tradeoff being its cluttered variables.</p>
+    <figure><img src="images/ac6-page-8-figure-1.png" alt="Base button variables in Unreal Engine"><figcaption>Base button variables</figcaption></figure>
+    <p>If a variable is left empty, then the code ignores the variable's corresponding functionality.</p>
 
-        <section id="research">
-            <h2>03 — Research</h2>
-        
-            <p>My research has mainly been divided into three different phases, some definitely more time-consuming than others. These are:</p>
-        
-            <ul>
-                <li>Choice of tools for this thesis, apart from Unreal Engine</li>
-                <li>Games and game audio/music for reference and inspiration</li>
-                <li>Technical research on how to process sounds dynamically</li>
-            </ul>
-        
-            <h3>MetaSounds, FMOD or Wwise?</h3>
-        
-            <p>As the project was decided to be made using Unreal Engine, the next step for me was to decide what to use for working with dynamic audio. There are a few relevant choices, each with its own merits. MetaSounds is Unreal Engine's own node-based system for working with sounds dynamically. While it has its benefits, such as the ability to synthesize sounds and being directly integrated with the rest of Unreal, the industry also widely uses audio middleware such as FMOD or Wwise.</p>
-        
-            <p>The middleware functions as a bridge between audio and music production and the game engine, allowing for most (and in some cases even more) of the audio manipulation and processing capabilities one would find in an engine, depending on the engine in question, but often in a more streamlined way. As I was not going to be synthesizing sounds for this project, but working only with WAV files, the choice came down to FMOD or Wwise, two widely used applications in the industry, with FMOD often associated with indie production and Wwise with AAA production.</p>
-        
-            <p>While both are capable of achieving similar end results (with Wwise generally considered the slightly more powerful and versatile option), I decided on FMOD. I had scratched the surface of it in a previous project, and its interface and workflow are closer to those of an audio editor or DAW (Digital Audio Workstation), which is more intuitive to me than Wwise's system, built around logic containers and trees. FMOD is also free up to a certain annual revenue threshold.</p>
-        
-            <h3>Games for reference and inspiration</h3>
-        
-            <p>When looking for games to use as references for this project, I had to keep three things in mind: the setting, the feeling and the functionality. As I had suspected, fantasy games where fast-paced PvP is a main feature, or at least designed to be semi-competitive, are really few and far between (although games like <i>Overwatch</i> feature some spell-casting, most of the combat relies on guns).</p>
-        
-            <p>So I tried to find an inspirational middle ground between the turn-based combat of <i>Baldur's Gate 3</i>, the more fast-paced spell-casting of the <i>Diablo</i> games and titles like <i>Hades</i>, and the environmental audio solutions of <i>Smite 2</i>. I found a video where the developers, Titan Forge, demonstrated their use of audio occlusion to muffle sounds behind obstacles in a very clear way. Although the system was implemented using MetaSounds, it gave me a good reference for our project.</p>
-        
-            <p>And as mentioned above, I of course also looked at and listened to <i>Armored Core VI</i>, which has arguably taken a predominantly functional approach, for better or worse, in that audio directly tied to combat awareness takes precedence over elements such as ambience, many movement sounds and music.</p>
-        
-            <p>As for the music, besides my long-time inspiration from other FromSoftware games, I also found relevant examples of dynamic music in lesser-known but more fast-paced titles such as the fighting game <i>Thems' Fighting Herds</i>, where the music not only changes depending on match intensity, but also changes instruments depending on which character currently has the upper hand. Although the latter would be outside the scope of our project and not very relevant (as it is not character-based), the overall use of different stages such as intro, main loop and outro is a close example of what would fit our gameplay very well.</p>
-        
-            <h3>Technical research</h3>
-        
-            <p>The technical research mostly encompassed documentation, Googling, tutorials and other resources regarding FMOD functionality, Unreal Engine blueprinting and a few other things more directly tied to sound design. This process was more about reading up on what a function, option or node does and then applying it in my work.</p>
-        
-            <p>As this phase involved a lot of learning by doing, I spent time exploring and experimenting with parameters, knobs, curves and values until I achieved the desired results. This process will be explained in more detail in the Knowledge Sharing section, but below is an outline of some very valuable new things I learned.</p>
-        
-            <h4>FMOD</h4>
-        
-            <ul>
-                <li>Using parameter seek speed to gradually change a parameter value for smooth transitions.</li>
-        
-                <li>Using scatterer instruments to randomly spawn sound effects during, for example, a loop, as opposed to multi instruments, which are more suited to playing sounds immediately or at a set point in each loop, with variation through settings such as Async and Offset.</li>
-        
-               <li>Using Async playback and random modulation of the Start Offset for further variation. This allows a sound clip to start playing from a randomly selected point within a set range each time, creating more variation in how the beginning of an event sounds.</li>
-        
-                <li>Expanded use of loop regions. While I had worked with loop regions in FMOD previously, it was only for the purpose of looping an ambient sound effect from beginning to end. In this project, however, I used them together with transition regions, destination markers and quantization for dynamic music (see below).</li>
-        
-                <li>Using transition regions to decide within which boundaries in a song or sound effect a parameter change will actually trigger a transition.</li>
-        
-                <li>Using destination markers to decide where the playhead will jump if a parameter triggers a transition within a transition region.</li>
-        
-                <li>Using quantization. After setting the BPM in FMOD to match the music (or, in other cases, a heartbeat or other rhythmic audio), quantization makes sure the current bar (in musical terms) is finished before transitioning or "jumping" to a different part of the song.</li>
-            </ul>
-        
-            <h4>Unreal Engine</h4>
-        
-            <ul>
-                <li>Using custom events on a frame-independent timer to work with FMOD parameters and functions for line tracing, and using that line tracing in conjunction with FMOD seek speed for smooth audio occlusion (muffling sounds behind objects).</li>
-        
-                <li>Using checks for <i>Is Dedicated Server</i> and <i>Is Locally Controlled</i> to ensure proper usage of FMOD events in an online environment.</li>
-        
-                <li>Working with more FMOD nodes, references and functionality in Blueprints.</li>
-            </ul>
-        
-            <h4>Sound design</h4>
-        
-            <ul>
-                <li>Using different types of attenuation curves (volume drop-off) for different types of sounds. An inverse curve will work for most sounds, but an inverse tapered curve with a drop at the end will work better for "boomy" sounds.</li>
-        
-                <li>Refined use of double transients in explosive sounds. Double transients are short, sharp sounds used at the beginning of a sound effect for the purpose of anticipation and added weight. They basically mean "KA-BOOM" instead of just "BOOM". While this was not a new concept for me as such, I had the opportunity to look at how these can be used more subtly, which is more fitting for spell-launch effects that lack the obvious-sounding trigger mechanisms often found in rifles or shotguns.</li>
-        
-                <li>Using environmental reverb. While I have been working with reverb for individual sound effects and in music (sometimes perhaps a bit too enthusiastically), this was a good opportunity to learn more about reverb in wide-open spaces such as our lake arena.</li>
-        
-                <li>Bonus: I learned the names of some more Celtic instruments, including the bodhrán (a handheld drum which is featured prominently in the gameplay music!).</li>
-            </ul>
-        </section>
+    <h4>Problems when refactoring widgets</h4>
+    <p>Just as research had warned, widgets are very strict with their structure and this was definitely felt when refactoring. As it took time for someone on the team to produce background images for all the buttons in the game, background image functionality was not supported in buttons yet. When it came to implementing the image it required a restructuring of the base button class, as its button widget could only contain one child. It required a lot of experimentation, as it is not very obvious what widget could solve this issue. The “border” widget that has a background image variable always stretches the image to fit the border’s size, which was undesired.</p>
+    <figure><img src="images/ac6-page-8-figure-2.png" alt="Overlay widget hierarchy inside the base button"><figcaption>Overlay widget used to support multiple children</figcaption></figure>
+    <p>The overlay widget wound up being the solution to the problem as it gets around the one-child limit of the button and can overlay as many of its children as possible.</p>
 
-        <section id="process">
-            <h2>04 — Production Process and Testing</h2>
-        
-            <p>The process of actually making the things I had in mind was roughly divided into three steps (in terms of work and production flow, not necessarily always chronologically):</p>
-        
-            <ol>
-                <li>Produce the audio assets (sound effects and music).</li>
-                <li>Make events in FMOD using these assets, create and assign the various parameters, randomization, regions, etc.</li>
-                <li>Implement the events in Unreal using Blueprints, and, when necessary, build Blueprints to make the sounds and parameters work as intended.</li>
-            </ol>
-        
-            <h3>Audio Production</h3>
-        
-            <p>I will only touch on this very briefly, as this has more to do with sound design, editing and composition than game programming (although technically speaking, the music is also programmed in a sequencer!). For sound effects, I have used free-to-use (and no-attribution-needed) sound effects from online resources, and then edited, combined and exported these in a uniform WAV format as assets ready for use. The editing phase has mostly consisted of cutting, moving and applying various effects to the waveform. I have mainly been using the audio editor Audacity for this. My aim has been to achieve distinct, easily recognizable sounds for spells, impacts and movement (made to match the visual effects in the game), as well as non-intrusive ambience in the form of wind that increases in intensity with player altitude, along with the eerie sounds of loon birds. The UI button click sounds are very straightforward and functional.</p>
-
-            <img src="images/ShieldShatterAudacity.png" alt="Editing the shield shatter SFX clips">
-            <i>Editing the shield shatter SFX clips</i>
-            <br>
-            
-            <p>As for the gameplay music, it has been composed and mixed in the digital audio workstation Reason. My goal was to create a catchy, kind of epic Celtic-sounding tune that would be easy to associate with both witches dancing and battle, with mainly traditional instruments, a shuffle beat mixed with heavy percussion. The music has a few key parts to it, such as a calmer intro, a main gameplay section and a more intense section intended to play the first time either of the characters' shields is broken, reflecting the increased stakes and intensity of that part of the battle.</p>
-
-            <h4>Gameplay music (full version)</h4>
-            
-            <audio controls preload="metadata">
-                <source src="audio/ArmoredWitchFULL.mp3" type="audio/mpeg">
-                Your browser does not support audio playback.
-            </audio>
-            <br>
-
-            <img src="images/ReasonScreen1.png" alt="Making music can be programming too!">
-            <i>Making music can be programming too!</i>
-            <br>
-            
-            <h3>FMOD Events and Parameters</h3>
-        
-            <p>The work in FMOD is also divided into two main parts: placing and processing the sounds in events (with different effects and manipulation through loops, etc.) and then assigning parameters to be changed in Unreal Engine, thereby allowing for adaptive changes in the audio during gameplay.</p>
-        
-            <h4>The Event Sounds</h4>
-        
-            <p>All combat events contain multiple sound clips, and all events make use of basic randomization, such as a random pitch shift for each individual clip, guaranteeing some basic variety each time the event is triggered. Furthermore, most of them contain multi Instruments, which will play a sound at random (or in a predetermined shuffle order, if one so desires) from a list of sounds.</p>
-        
-            <p>For the blood projectile, I opted to use the scatterer Instrument, so that during the projectile's travel sound loop, wet drop sounds will spawn at a random rate and volume between intervals set beforehand, simulating the sound of blood dripping from the projectile (but the actual sound is that of water, I promise!). Similarly, I used a scatterer Instrument for the Astral Homing Projectile, simulating sparkles (as one imagines stars sound like for some reason) appearing at random while the other "main" sound clips run through their loops.</p>
-        
-            <p>Several longer sound clips, such as the projectiles, use the Async (as in asynchronous playback) option, allowing me to use random modulation of the Start Offset to determine where they start playing (for instance, somewhere between 0 and 20% into the clip), adding even further variation. To guarantee a smooth start and end where needed, I used AHDSR Modulation (Attack, Hold, Decay, Sustain and Release), which, in short, determines how fast the sound should reach a certain volume level and then go back to zero. I used this primarily for events with loops, which by definition don't have a natural start or end in their waveform, so that the sound doesn't just "cut in" and "cut out".</p>
-        
-            <p>All sound clips that are supposed to be played in 3D (so the vast majority) are in mono, for an accurate representation of their position in 3D space and also to avoid phase issues. The Master Track output in FMOD, however, is configured for surround sound, allowing the spatialized audio to be properly output to the game's audio system. Ambient effects, such as the wind, should sound like they are everywhere and not originating from a single point, and are therefore exported and used in stereo as 2D sounds instead.</p>
-        
-            <p>Other output functions I have made use of are Max Instances (how many instances of an event can be played at a time) and Cooldown (how much time has to elapse before the same event is allowed to trigger again). This is to prevent the same event and sound effect from overlapping itself, such as if several spell projectiles were to impact at nearly the same instant (which is at least theoretically possible, since different spell projectile types have different travel speeds and might thus "catch up" with a previously launched projectile of a different type). I also made use of FMOD's Doppler effect for projectiles.</p>
-        
-            <p>Nearly all events make use of the Timeline, allowing for the use of loop regions and the placement of sound clips at different positions in the timeline. It also comes with a Master Track, where the combined output of all the sound clips in the event can be handled together.</p>
-        
-            <p>For the gameplay music event, I have used two loop regions (one for each level of match intensity) that work together with transition regions. This means that if a parameter value (see below) is changed, the current bar will finish playing through quantization and then jump to the designated parameter marker.</p>
-
-            <img src="images/MusicRegions.png" alt="FMOD Event window for the music with regions and markers">
-            <i>FMOD Event window for the music with regions and markers</i>
-            <br><br>
-
-            <img src="images/ShieldShatterFMOD.png" alt="The shield shatter event in FMOD">
-            <i>The shield shatter event in FMOD</i>
-            <br>
-            
-            <h4>The Parameters</h4>
-        
-            <p>I created several parameters for the purpose of changing the sounds playing in an event in an adaptive way.</p>
-        
-            <ul>
-                <li><b>Occlusion</b> (all 3D events): Continuous, with a value between 0 and 1, where 0 represents the sound being out in the open and 1 being completely occluded by an obstacle (which in our game would mean it is behind one of the stone ruins from the player's POV). Used with a low-pass filter that basically decreases the maximum frequency range of the sound as the value increases, resulting in a more muffled sound for an occluded sound source. Makes use of the aforementioned Seek function so that when the value changes, it won't just snap to that amount of low-pass filtering, but instead gradually move towards it.</li>
-        
-                <li><b>Altitude</b> (Wind event): Continuous, with values ranging between 0 and 1. The actual altitude of the character in Unreal Units is then clamped between these values in Unreal Engine and is therefore readily usable regardless of the character's actual maximum altitude in the game. Used with the pitch and volume values of the wind, both of which increase with the parameter value. This makes the wind quieter and softer near the water surface, and louder and higher-pitched as the player rises. This event also uses the Seek function.</li>
-        
-                <li><b>Distance</b> (Astral Homing Projectile event): Continuous, with values between 0 and 1,000 Unreal Units (0–10 meters), used with a tremolo effect added to the projectile's sound in the game when it is closer than 10 meters. This is intended as a fantasy version of the gradually intensifying "homing missile closing in" beeps of modern technology.</li>
-        
-                <li><b>Shield Integrity</b> (Shield Impact event): Continuous, with values between 0 and 100, used with pitch that increases as shield integrity goes down.</li>
-        
-                <li><b>Shield Destroyed</b>: Discrete, with values of 0 or 1, and works as a Boolean, where 1 means that a player's shield has been destroyed. Set to Global, allowing the parameter to be changed (and the music to skip to the Shield Destroyed marker) in any Blueprint.</li>
-        
-                <li><b>Round Finished</b>: Exactly the same setup and functionality as Shield Destroyed, but instead skips to the quite dramatic end-"DUH-DUHN" of the music track when the round/match is over.</li>
-            </ul>
-
-            <img src="images/OcclusionCurves.png" alt="Curves for the lowpass filter and volume used in the occlusion parameter">
-            <i>Curves for the lowpass filter and volume used in the occlusion parameter</i>
-            <br><br>
-            
-            <img src="images/WindAltitude.png" alt="Curves for pitch and volume used in the altitude parameter">
-            <i>Curves for pitch and volume used in the altitude parameter</i>
-            <br>
-            
-            <h3>Unreal Engine</h3>
-        
-            <p>My work in Unreal Engine for this thesis has primarily consisted of first setting up an independent test level for initial FMOD functionality and viability, and later making Blueprints for the adaptive parts of the audio. Below follows a brief description of these and their main purpose and functionality.</p>
-        
-            <ul>
-                <li><b>Altitude and wind:</b> I made a Blueprint that measures the player's Z-distance from the water surface in a Custom Event, and clamps that value between the Altitude parameter's 0 and 1 values before passing it to FMOD.</li>
-        
-                <li><b>Audio Occlusion:</b> I made a Blueprint component for Audio Occlusion, also using a Custom Event with a custom timer/update rate of 0.05 seconds. The initial version used a single line trace between the audio source and the player camera, which, together with the event's Seek function, allowed for a smooth transition from muffled to unmuffled sounds and vice versa. This Blueprint mirrored the built-in Occlusion option of FMOD events in Unreal Engine, and could as such be seen as a waste of time production-wise (but of course not a waste in terms of learning). The problem with this single line trace version is that, even if the transition is smooth, the value always lands on a binary occluded or not occluded. So I decided to expand on the Blueprint by adding four additional line traces, positioned above, below, to the left and to the right of the original central trace, forming a cross-shaped pattern. This expands the possible occlusion levels to five: completely occluded, completely unoccluded and three steps in between. Together with the Seek functionality, this provides seamless partial occlusion (at least to the human ear during gameplay).</li>
-        
-                <li><b>Impact Emitter:</b> In order for impacts to make use of audio occlusion, they can't just be played at the impact location, since there would be nothing telling the sounds to check for occlusion. I therefore made an Actor Blueprint that can hold the Audio Occlusion Blueprint component, intended to spawn when a projectile is destroyed. The Impact Emitter actor will then play the intended impact FMOD event and destroy itself after 5 seconds, giving enough time for any of the impact sounds to finish playing.</li>
-            </ul>
-
-            <h3>Testing</h3>
-            
-            <p>Testing was initially carried out in a custom audio test level I set up with a stationary spell emitter shooting a homing projectile object at the player. This was primarily used as a controlled environment to test the viability of the Astral Projectile tremolo and potential similar effects.</p>
-        
-            <p>Occlusion testing was carried out using an audio testing static actor emitting a reasonably clear but moderately annoying alarm clock sound. The test actor was placed behind a ruin, with each line trace having a visual debug line. This was a very effective way of testing that the Audio Occlusion component did its job correctly.</p>
-
-            <img src="images/LineTraceScreen.png" alt="Testing the AudioOcclusion line traces in UE5">
-            <i>Testing the AudioOcclusion line traces in UE5</i>
-            
-            <p>In-game testing has been carried out as the FMOD events have been implemented in the engine. It was immediately clear that individual spell sound effects matched their visual effects very nicely, and the only adjustments needed to the FMOD events were minor volume changes. The wind ambience worked almost surprisingly well in-game during tests of the player character's altitude, and no adjustments were necessary in FMOD.</p>
-        </section>
-
-        <section id="results">
-            <h2>05 — Results</h2>
-        
-            <p>I believe I have answered the question of my thesis in that I have researched, experimented with, produced and tested ways of using dynamic audio as a means of providing both awareness and immersion. The results add situational awareness through occlusion and changes in ambient sound, while the spell sound effects match their visual counterparts and the setting, yet maintain their own distinct character.</p>
-        
-            <p>I also think I have managed to establish a natural link between, for example, the launch, projectile and impact sound effects, while the launch and impact effects also have enough of their own distinctiveness to make them easily separable to the ear. Overall, the sound effects and music feel like they are part of the same setting, and I think there is good cohesion both between the audio assets themselves and between the audio and the rest of the game.</p>
-        
-            <h4>Audio Samples</h4>
-        
-            <audio controls preload="metadata">
-                <source src="audio/AstralDemo.wav" type="audio/wav">
-                Your browser does not support audio playback.
-            </audio>
-            <br>
-            <audio controls preload="metadata">
-                <source src="audio/BoneDemo.wav" type="audio/wav">
-                Your browser does not support audio playback.
-            </audio>
-            <br>
-            <audio controls preload="metadata">
-                <source src="audio/BloodProjDemo.wav" type="audio/wav">
-                Your browser does not support audio playback.
-            </audio>
-            <br>
-            <audio controls preload="metadata">
-                <source src="audio/ShieldShatterDemo.wav" type="audio/wav">
-                Your browser does not support audio playback.
-            </audio>
-            <br>
-
-        </section>
-        
-        <section id="conclusion">
-            <h2>06 — Reflection and Conclusion</h2>
-        
-            <p>This has been a very valuable experience for me, both from a learning perspective and in realizing the capabilities offered by working with an application like FMOD alongside game engines like UE5. As I mentioned earlier, the interface and workflow of FMOD are very intuitive to me (also compared to working with MetaSounds in a previous project), which has made learning and production easier and faster.</p>
-        
-            <p>As for what I chose to focus on for this thesis beyond the combat SFX, I think that, given the gameplay, setting and level, ambient sounds and occlusion were natural choices. However, I can think of several other ways to work with adaptive audio to create a really luxurious soundscape, had there been more time. I've increasingly realized that there are few limits to the ways in which one can work with randomness and adaptive sounds (then again, some of that might just involve using different effects and filters or adding more parameter curves). And while I've far from exhausted everything that can be done with audio for a game like this, I believe my choices and focus during this project have provided a fairly good stepping stone for future work with dynamic sound and music.</p>
-        
-            <p>Regarding the audio occlusion solution, I admit that most players would probably not notice any difference between the single, binary line trace and the multi-trace version I built, given the fast-paced nature of the game and the amount of other things going on at the same time. I do, however, think it was a good example of a valuable experience and a tool that I can bring to other types of projects where it would have greater relevance, such as a horror game where you need to hide from a ghost and the sound and music change depending on how much you see of it – or how much it sees you – or sneaky stealth games in general. I can also imagine using audio occlusion (with perhaps a wider set of line traces) in more surreal settings where, instead of muffling the sound, it applies completely different effects and does weird things.</p>
-        
-            <p>Working with audio occlusion also made me realize that there might be a discussion to be had about whether the player should hear exactly what the character would hear, or exactly what the camera would hear. I suppose that ultimately depends on the game and its gameplay. For a third-person action game, I felt intuitively that the player's ears should be aligned with their eyes/camera (and my impression is that most third-person games go with this solution). But it's easy to imagine game scenarios (again, in, for example, stealth and horror games) where the player's hearing would be muffled if they were hiding in a locker or a box, and perhaps the sound of their breathing or heartbeat could be exaggerated instead.</p>
-        
-            <p>In conclusion, I think the main takeaway is the realization that much of what I learned through working with this thesis question about awareness and immersion in a fantasy combat game can easily be applied to so many other things!</p>
-        </section>
-
-    </main>
-
-    <footer>
-        <p>YRGO GP25 · 2026</p>
-    </footer>
-
+    <h3>Equipment Selection UI and Equipment System Design Philosophy</h3>
+    <p>We decide as a team to simplify AC6’s game design for customization, by reducing the type of different things you could equip down to five (down from twelve). This was done not only to minimize the amount of content we would have to produce, but also to put our own spin on the system by introducing the Weight system. As we decided, the Weight system lets you, whenever you choose a spell, also choose that spell’s “weight”. That weight is represented visually on your character corresponding to where it is equipped and grants that spell bonus effects like improved damage or increased projectile amount, but comes with the cost of making your character travel slower. Although this is a departure from how AC6 works, it still maintains the principle of the player’s choices coming with a cost. It is also a way of making it feel as though our limited amount of spells we can create as an indie team feel like there are a lot more of them, as Weight can alter a lot of things.</p>
+    <p>In order to store spells that should be in rotation for the player to use, another Data Asset was created. A BPFL could have also achieved this, but in this case an asset that could be assigned as a variable was more convenient, as it would not require hard coding of where to find these spells.</p>
+    <figure><img src="images/ac6-page-9-figure-1.png" alt="Used spells and spell rotation data asset settings"><figcaption>Spells in rotation Data Asset settings</figcaption></figure>
+    <p>This solution allows us to insert any SpellsInRotation Data Asset in the used spells variable, which then generates clickable buttons for each spell we have decided the player can use. This is very easy for other developers in the project to use, as they can remove or add spells to the data asset without touching anything else.</p>
+    <p>As seen here in the SpellClickable button’s variables, we can assign what spell saver for the button to use. The spell saver is a class that inherits from our custom Save Object, and makes saving what the player clicks on much simpler.</p>
+    <figure><img src="images/ac6-page-10-figure-1.png" alt="SpellClickable button variables"><figcaption>SpellClickable button variables</figcaption></figure>
+    <p>The BP_SpellSaver class:</p>
+    <figure><img src="images/ac6-page-10-figure-2.png" alt="BP Spell Saver class blueprint"><figcaption>BP_SpellSaver class</figcaption></figure>
+</section>
+<section id="result">
+    <h2>05 — The Result</h2>
+    <p>The source report contains this section heading but no accompanying result text.</p>
+</section>
+<section id="reflection">
+    <h2>06 — Reflection</h2>
+    <p>I am proud of many of the solutions I found while developing this system in a game engine I am not very versed in, but that has led me to realize a few good lessons and help me see how a few things could have been done more effectively. I feel that I could have worked around UE5’s widgets better, and come up with a better solution than cramming all too much functionality into the button base class. It was definitely the fastest solution, and for an 8 week project that matters a lot, but if I were to work on this further I would break the button down into smaller widget blueprint pieces that can find and access each other's code.</p>
+    <p>If this project were to be made in a context where I had other areas of the game I worked on, I would like to work more directly on the spells’ effects to refactor the spell creation system into using a more dynamic and inheritance-based actor class, where actor components define what the spell does.</p>
+    <p>This is more of a wish list item, but having a video preview of the spell (like in Armored Core) would clarify what each spell does and would inform the player’s choices.</p>
+</section>
+</main>
+<footer><p>YRGO · Game Programmer Course · Project Spellrush</p></footer>
 </body>
 </html>
